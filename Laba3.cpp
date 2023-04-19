@@ -6,15 +6,19 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
-
+#include <iterator>
 
 using namespace std;
 
 
 
-//int fun() {
+void fun(map<string, int>mp) {
+    for (auto elem : mp)
+    {
+        cout<< "map[" << elem.first<< "]="<< elem.second << endl;
+    }
 
-//}
+}
 
 
 int main()
@@ -23,7 +27,7 @@ int main()
     map <string, int> mp;
     ifstream fin;
     fin.open("text.txt");
-    
+
     if (fin.is_open())
     {
         string str;
@@ -32,14 +36,20 @@ int main()
         {
             str = "";
             fin >> str;
-            cout << str<<" ";
-            mp.insert(make_pair("str",i ));
-            i++;
+
+            if (mp.count(str) == 0)
+            {
+                mp.insert(make_pair(str, 1));
+            }
+            else
+            {
+                mp[str]++;
+            }
+
         }
     }
 
-    
-    
+    fun(mp);
 
 
     fin.close();
