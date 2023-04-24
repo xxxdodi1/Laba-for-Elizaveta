@@ -1,32 +1,122 @@
 #include <iostream>
-
+#include <cstdlib>
 using namespace std;
 
-int main() {
-    setlocale(LC_ALL, "ru");
-    int steck[20];
-    int i = -1;  // объявили стек
+// Определяем емкость stack по умолчанию
+#define SIZE 10
 
-    for (int j = 0; j < 3; j++) {
-        int a;
+// Класс для представления stack
+class Stack
+{
+    int* arr;         
+    int top;
+    int capacity;
 
-        cin >> a;
+public:
+    Stack(int size = SIZE);         // конструктор
+    ~Stack();                       // деструктор
 
-        i++;  // увеличиваем i на один
+    void push(int);
+    int pop();
+    int peek();
 
-        steck[i] = a;  // добавляем в стек элемент
+    int size();
+    bool isEmpty();
+    bool isFull();
+};
+
+// Конструктор для инициализации stack
+Stack::Stack(int size)
+{
+    arr = new int[size];
+    capacity = size;    
+    top = -1;
+}
+
+// Деструктор для освобождения памяти, выделенной для stack
+Stack::~Stack() {
+    delete[] arr;
+}
+
+// Вспомогательная функция для добавления элемента `x` в stack
+void Stack::push(int x)
+{
+    if (isFull())
+    {
+        cout << "Overflow\nProgram Terminated\n";
+        exit(EXIT_FAILURE);
     }
 
-    if (i == -1) cout << "Стек пуст\n";  // проверяем пуст ли стек (нет)
+    cout << "Ввод  " << x << endl;
+    arr[++top] = x;
+}
 
-    cout << steck[i] << " это верхний элемент стека\n";
+// Вспомогательная функция для извлечения верхнего элемента из stack
+int Stack::pop()
+{
+    // проверка на опустошение stack
+    if (isEmpty())
+    {
+        cout << "Underflow\nProgram Terminated\n";
+        exit(EXIT_FAILURE);
+    }
 
-    cout << "Сейчас мы удалим верхний элемент\n";
+    cout << "Удаление " << peek() << endl;
 
-    i--;  // уменьшаем i на один
+    // уменьшаем размер stack на 1 и (необязательно) возвращаем извлеченный элемент
+    return arr[top--];
+}
 
-    cout << steck[i]<<"Новый верхний элемент стека";
+// Вспомогательная функция для возврата верхнего элемента stack
+int Stack::peek()
+{
+    if (!isEmpty()) {
+        return arr[top];
+    }
+    else {
+        exit(EXIT_FAILURE);
+    }
+}
 
-    system("pause");
+// Вспомогательная функция для возврата размера stack
+int Stack::size() {
+    return top + 1;
+}
+
+// Вспомогательная функция для проверки, пуст stack или нет
+bool Stack::isEmpty() {
+    return top == -1;               // или return size() == 0;
+}
+
+// Вспомогательная функция для проверки, заполнен ли stack или нет
+bool Stack::isFull() {
+    return top == capacity - 1;     // или return size() == capacity;
+}
+
+int main()
+{
+    setlocale(LC_ALL, "ru");
+    Stack pt(3);
+
+    pt.push(4);
+    pt.push(6);
+
+    pt.pop();
+    pt.pop();
+
+    pt.push(2);
+
+    cout << "Верхний элемент " << pt.peek() << endl;
+    cout << "Размер стека" << pt.size() << endl;
+
+    pt.pop();
+
+    if (pt.isEmpty()) {
+        cout << "Стек пуст\n";
+    }
+    else {
+        cout << "Стек не пуст\n";
+    }
+
     return 0;
 }
